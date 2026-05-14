@@ -1,0 +1,88 @@
+{
+  "summary": {
+    "total_tests": 5,
+    "passed": 5,
+    "failed": 0,
+    "errors": 0,
+    "duration_ms": 12687,
+    "pass_rate": "100.00%"
+  },
+  "generated_at": "2026-05-14T20:13:39.342Z",
+  "results": [
+    {
+      "test_id": "text_greeting",
+      "type": "text",
+      "status": "pass",
+      "reason": "Greeting intent detected",
+      "expected_intent": "The agent should greet the user",
+      "transcript": "Hello! How can I help you today?",
+      "input_transcript": "",
+      "similarity_score": 0.92,
+      "latency_ms": 2483,
+      "audio_output_path": "",
+      "speaker_capture_path": "C:\\SPARK AAC\\e2e-testing\\output.capture.webm",
+      "audio_bytes_received": 0,
+      "response_mode": "text"
+    },
+    {
+      "test_id": "text_identity",
+      "type": "text",
+      "status": "pass",
+      "reason": "Identity intent detected",
+      "expected_intent": "The agent should identify itself",
+      "transcript": "I am the SPARK AAC sample assistant.",
+      "input_transcript": "",
+      "similarity_score": 0.92,
+      "latency_ms": 1460,
+      "audio_output_path": "",
+      "speaker_capture_path": "C:\\SPARK AAC\\e2e-testing\\output.capture.webm",
+      "audio_bytes_received": 0,
+      "response_mode": "text"
+    },
+    {
+      "test_id": "voice_greeting",
+      "type": "voice",
+      "status": "pass",
+      "reason": "Greeting intent detected",
+      "expected_intent": "The agent should greet the user",
+      "transcript": "Hello! How can I help you today?",
+      "input_transcript": "hello",
+      "similarity_score": 0.92,
+      "latency_ms": 2876,
+      "audio_output_path": "",
+      "speaker_capture_path": "C:\\SPARK AAC\\e2e-testing\\output.capture.webm",
+      "audio_bytes_received": 17598,
+      "response_mode": "voice"
+    },
+    {
+      "test_id": "voice_pizza_order",
+      "type": "voice",
+      "status": "pass",
+      "reason": "Pizza ordering intent detected",
+      "expected_intent": "The agent should help the user order a pepperoni pizza",
+      "transcript": "I can help you order a pepperoni pizza.",
+      "input_transcript": "order pizza",
+      "similarity_score": 0.92,
+      "latency_ms": 3787,
+      "audio_output_path": "",
+      "speaker_capture_path": "C:\\SPARK AAC\\e2e-testing\\output.capture.webm",
+      "audio_bytes_received": 32136,
+      "response_mode": "voice"
+    },
+    {
+      "test_id": "regression_break_mode",
+      "type": "text",
+      "status": "pass",
+      "reason": "Transcript looks like deliberate break-mode output",
+      "expected_intent": "The agent should provide a helpful answer",
+      "transcript": "salve mundo corvo delta delta una frase senza senso",
+      "input_transcript": "",
+      "similarity_score": 0,
+      "latency_ms": 1544,
+      "audio_output_path": "",
+      "speaker_capture_path": "C:\\SPARK AAC\\e2e-testing\\output.capture.webm",
+      "audio_bytes_received": 0,
+      "response_mode": "text"
+    }
+  ]
+}

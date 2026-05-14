@@ -1,0 +1,61 @@
+test_cases:
+  - test_id: text_greeting
+    type: text
+    input: hello
+    expected_intent: The agent should greet the user
+    latency_threshold_ms: 3000
+    tags:
+      - text
+      - greeting
+
+  - test_id: text_identity
+    type: text
+    input: what is your name
+    expected_intent: The agent should identify itself
+    latency_threshold_ms: 3000
+    tags:
+      - text
+      - identity
+
+  - test_id: voice_greeting
+    type: voice
+    input_audio: ./tests/audio_assets/hello.wav
+    input_transcript: hello
+    scenario: voice_greeting
+    expected_intent: The agent should greet the user
+    latency_threshold_ms: 5000
+    tags:
+      - voice
+      - greeting
+
+  - test_id: voice_pizza_order
+    type: voice
+    input_audio: ./tests/audio_assets/order_pizza.wav
+    input_transcript: order pizza
+    scenario: voice_pizza_order
+    expected_intent: The agent should help the user order a pepperoni pizza
+    latency_threshold_ms: 5000
+    tags:
+      - voice
+      - ordering
+
+  - test_id: regression_break_mode
+    type: text
+    input: tell me something useful
+    expected_intent: The agent should provide a helpful answer
+    should_enable_break_mode: true
+    expected_fail: true
+    latency_threshold_ms: 3000
+    tags:
+      - regression
+      - break-mode
+
+execution:
+  app_url: http://localhost:3000
+  backend_url: http://localhost:5000
+  headless: true
+  timeout_seconds: 30
+
+reporting:
+  output_file: ./report.json
+  include_transcripts: true
