@@ -101,6 +101,11 @@ Example voice case:
 6. The backend uses that transcript metadata for deterministic response routing.
 7. Synthetic response audio is disabled by default.
 
+For manual browser testing, click `Start Voice` to record and send microphone
+bytes over WebSocket. If you type text in the composer before starting voice,
+that text is sent as transcript metadata so the backend can produce a content
+response. The app does not transcribe microphone audio.
+
 ## Semantic Verification
 - No voice model is used in this sample.
 - Voice audio is never transcribed by the sample app.

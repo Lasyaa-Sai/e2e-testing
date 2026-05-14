@@ -232,11 +232,6 @@ function App() {
     }
 
     const voiceTranscript = (initialVoiceTranscript || input).trim();
-    if (!voiceTranscript) {
-      setStatus('Type the transcript text first, then start voice.');
-      return;
-    }
-
     const mediaStream = await navigator.mediaDevices.getUserMedia({ audio: true });
     audioContextRef.current?.resume().catch(() => {});
     const recorder = new MediaRecorder(mediaStream);
@@ -247,7 +242,9 @@ function App() {
     voiceStartTimeRef.current = Date.now();
     setIsListening(true);
     setIsSending(true);
-    setStatus('Recording voice bytes...');
+    setStatus(voiceTranscript
+      ? 'Recording voice bytes with transcript metadata...'
+      : 'Recording voice bytes...');
 
     wsRef.current.send(JSON.stringify({
       type: 'voice_start',

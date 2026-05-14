@@ -1,0 +1,55 @@
+# Environment and secrets
+.env
+.env.*
+!.env.example
+
+# Dependencies
+node_modules/
+app/node_modules/
+harness/node_modules/
+
+# React build output
+app/build/
+build/
+dist/
+
+# Logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Test and run artifacts
+report.json
+output.wav
+output.capture.webm
+test-results/
+playwright-report/
+coverage/
+
+# Generated audio fixtures and local media
+tests/audio_assets/*.wav
+tests/audio_assets/*.webm
+tests/audio_assets/*.mp3
+tests/audio_assets/*.ogg
+!tests/audio_assets/.gitkeep
+
+# Python local environment/cache
+.venv/
+venv/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+
+# OS/editor noise
+.DS_Store
+Thumbs.db
+desktop.ini
+.idea/
+.vscode/
+
+# Temporary files
+tmp/
+temp/
+*.tmp
