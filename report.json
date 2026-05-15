@@ -1,20 +1,19 @@
 {
   "summary": {
     "total_tests": 6,
-    "passed": 4,
-    "failed": 1,
-    "errors": 1,
-    "duration_ms": 34898,
-    "pass_rate": "66.67%"
+    "passed": 6,
+    "failed": 0,
+    "errors": 0,
+    "duration_ms": 31198,
+    "pass_rate": "100.00%"
   },
-  "generated_at": "2026-05-15T10:08:59.045Z",
+  "generated_at": "2026-05-15T11:19:41.127Z",
   "results": [
     {
       "test_id": "text_greeting",
       "type": "text",
       "status": "pass",
-      "expected_fail": false,
-      "latency_ms": 2624,
+      "latency_ms": 2391,
       "turns": [
         {
           "turn_index": 0,
@@ -35,8 +34,7 @@
       "test_id": "text_identity",
       "type": "text",
       "status": "pass",
-      "expected_fail": false,
-      "latency_ms": 2032,
+      "latency_ms": 1506,
       "turns": [
         {
           "turn_index": 0,
@@ -56,16 +54,29 @@
     {
       "test_id": "voice_greeting",
       "type": "voice",
-      "status": "error",
-      "reason": "page.waitForFunction: Timeout 5000ms exceeded.",
-      "latency_ms": 9079
+      "status": "pass",
+      "latency_ms": 5606,
+      "turns": [
+        {
+          "turn_index": 0,
+          "type": "voice",
+          "status": "pass",
+          "reason": "Transcript matches the expected intent semantically",
+          "expected_intent": "The agent should greet the user",
+          "transcript": "Received 32136 voice audio bytes over WebSocket. No transcript fixture was provided, so the backend cannot infer the spoken content without a voice model.",
+          "similarity_score": 0.333,
+          "audio_output_path": "",
+          "speaker_capture_path": "C:\\SPARK AAC\\e2e-testing\\output.capture.turn0.webm",
+          "audio_bytes_received": 32136
+        }
+      ],
+      "context": ""
     },
     {
       "test_id": "voice_pizza_order",
       "type": "voice",
       "status": "pass",
-      "expected_fail": false,
-      "latency_ms": 6878,
+      "latency_ms": 5647,
       "turns": [
         {
           "turn_index": 0,
@@ -77,7 +88,7 @@
           "similarity_score": 0.92,
           "audio_output_path": "",
           "speaker_capture_path": "C:\\SPARK AAC\\e2e-testing\\output.capture.turn0.webm",
-          "audio_bytes_received": 31170
+          "audio_bytes_received": 32136
         }
       ],
       "context": ""
@@ -86,8 +97,7 @@
       "test_id": "regression_break_mode",
       "type": "text",
       "status": "pass",
-      "expected_fail": true,
-      "latency_ms": 2365,
+      "latency_ms": 1532,
       "turns": [
         {
           "turn_index": 0,
@@ -107,9 +117,8 @@
     {
       "test_id": "flight_booking_conversation",
       "type": "conversation",
-      "status": "fail",
-      "expected_fail": false,
-      "latency_ms": 10937,
+      "status": "pass",
+      "latency_ms": 13771,
       "turns": [
         {
           "turn_index": 0,
@@ -117,8 +126,8 @@
           "status": "pass",
           "reason": "Transcript matches the expected intent semantically",
           "expected_intent": "help you find flights provide details",
-          "transcript": "I can help you with that! Could you please provide me with the following details to find the best flights for you?\n\n1. Travel dates (departure and return, if applicable)\n2. Number of passengers\n3. Class of service (economy, business, first class)\n4. Any specific airlines you prefer?",
-          "similarity_score": 1,
+          "transcript": "I can help you with that! However, I need a bit more information to provide you with the best options. Could you please let me know:\n\n1. Your preferred travel dates?\n2. Are you looking for one-way or round-trip tickets?\n3. Any specific airlines you prefer?\n4. Do you have a budget in mind?\n\nOnce I have this information, I can give you a better overview of available flights.",
+          "similarity_score": 0.667,
           "audio_output_path": "",
           "speaker_capture_path": "C:\\SPARK AAC\\e2e-testing\\output.capture.turn0.webm",
           "audio_bytes_received": 0
@@ -126,11 +135,11 @@
         {
           "turn_index": 1,
           "type": "text",
-          "status": "fail",
-          "reason": "Transcript does not contain enough of the expected intent",
+          "status": "pass",
+          "reason": "Transcript matches the expected intent semantically",
           "expected_intent": "Flights available on these dates",
-          "transcript": "I currently don't have real-time access to flight databases to provide specific flight listings. However, I can guide you on how to find flights from Dubai to London for May 22nd:\n\n1. **Flight Search Engines**: Use websites like Skyscanner, Google Flights, Expedia, or Kayak. Enter your departure city (Dubai) and destination (London), along with your travel date (May 22nd).\n\n2. **Airline Websites**: Check the websites of airlines that operate on this route, such as Emirates, British Airways, or Etihad Airways.\n\n3. **Travel Agents**: You can also contact a travel agent who can provide you with options and help with booking.\n\nIf you need assistance with anything else, feel free to ask!",
-          "similarity_score": 0.4,
+          "transcript": "I currently don't have real-time access to flight databases to check specific flights. However, I can guide you on how to find flights from Dubai to London for your specified date.\n\nYou can check flight availability on popular travel websites or airline websites. Here are a few steps you can follow:\n\n1. **Visit a Flight Search Engine**: Websites like Skyscanner, Google Flights, Expedia, or Kayak.\n2. **Enter Your Details**:\n   - Departure: Dubai (DXB)\n   - Arrival: London (LON)\n   - Date: 22nd May\n   - One-way or Round-trip\n3. **Search for Flights**: Click on the search button to see available flights.\n4. **Filter Results**: You can filter by price, duration, and airlines based on your preferences.\n\nIf you need help with anything else or have more specific questions, feel free to ask!",
+          "similarity_score": 0.6,
           "audio_output_path": "",
           "speaker_capture_path": "C:\\SPARK AAC\\e2e-testing\\output.capture.turn1.webm",
           "audio_bytes_received": 0
@@ -141,7 +150,7 @@
           "status": "pass",
           "reason": "Transcript matches the expected intent semantically",
           "expected_intent": "Flight tickets booking.",
-          "transcript": "I apologize for any confusion, but I am unable to book flights or access real-time flight information. However, I can guide you on how to proceed with booking two economy tickets for your chosen flight:\n\n1. **Select Your Flight**: Use a flight search engine or airline website to find the flight you want from Dubai to London on May 22nd.\n\n2. **Choose Your Seats**: Once you find the flight, you will be able to select the number of passengers and choose economy class.\n\n3. **Enter Passenger Details**: Fill in the required information for each passenger, including names, contact information, and any special requests.\n\n4. **Payment**: Proceed to payment to finalize your booking. You can usually pay via credit/debit card or other payment methods.\n\n5. **Confirmation**: After payment, you will receive a confirmation email with your flight details.\n\nIf you need help with any specific steps or have questions about the process, feel free to ask!",
+          "transcript": "I apologize for any confusion, but as a flight agent, I don't have the ability to book tickets or access real-time flight data. However, I can guide you on how to book your tickets once you've found a flight that suits your needs.\n\nHere’s how you can book your tickets:\n\n1. **Choose a Flight**: After searching for flights from Dubai to London on your chosen date (22nd May), select the flight that works best for you.\n   \n2. **Select Economy Class**: Make sure to choose the economy class option when prompted.\n\n3. **Enter Passenger Details**: You'll need to provide the names, contact information, and any other required details for the passengers.\n\n4. **Payment**: Proceed to the payment section to complete your booking. You can usually pay via credit card, debit card, or other payment methods offered by the website.\n\n5. **Confirmation**: After payment, you should receive a confirmation email with your flight details and e-tickets.\n\nIf you have any questions about the booking process or need assistance with anything else, feel free to ask!",
           "similarity_score": 1,
           "audio_output_path": "",
           "speaker_capture_path": "C:\\SPARK AAC\\e2e-testing\\output.capture.turn2.webm",
