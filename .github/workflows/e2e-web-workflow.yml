@@ -18,7 +18,9 @@ jobs:
         with:
           node-version: 22
           cache: 'npm'
-          cache-dependency-path: './app/package-lock.json'
+          cache-dependency-path: |
+            app/package-lock.json
+            harness/package-lock.json
 
       - name: Setup Python
         uses: actions/setup-python@v5
@@ -39,7 +41,8 @@ jobs:
         run: |
           cd harness
           npm install
-          npx playwright install chromium
+          chmod +x node_modules/.bin/playwright || true
+          npx playwright install --with-deps chromium
 
       - name: Setup Python STT environment
         run: |
