@@ -1,4 +1,4 @@
-name: E2E Conversational Intelligence Verification Run 1
+name: E2E Conversational Intelligence Verification Run 2
 
 on:
   push:
@@ -51,12 +51,13 @@ jobs:
           pip install SpeechRecognition
           # Note: SpeechRecognition uses the internal Web Speech API endpoint for recognize_google()
 
-      - name: Start Backend
+      - name: Start Application Servers
         run: |
           cd app
+          BROWSER=none npm start &
           npm run backend &
-          # Wait for backend health check
-          sleep 5
+          # Wait for servers to be ready
+          sleep 15
 
       - name: Run E2E Harness
         env:
