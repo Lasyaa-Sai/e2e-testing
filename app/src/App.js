@@ -13,6 +13,7 @@ function getQueryParams() {
 function App() {
   const params = useMemo(() => getQueryParams(), []);
   const initialScenario = params.get('scenario') || '';
+  const initialContext = params.get('context') || '';
   const initialBreakMode = params.get('breakMode') === '1' || params.get('breakMode') === 'true';
   const initialVoiceTranscript = params.get('transcript') || '';
 
@@ -25,6 +26,7 @@ function App() {
   const [status, setStatus] = useState('Connecting to backend...');
   const [lastResponse, setLastResponse] = useState('');
   const [scenario] = useState(initialScenario);
+  const [context] = useState(initialContext);
 
   const wsRef = useRef(null);
   const recorderRef = useRef(null);
@@ -48,6 +50,7 @@ function App() {
       ws.send(JSON.stringify({
         type: 'session',
         scenario,
+        context,
         breakMode: initialBreakMode,
       }));
     };

@@ -66,13 +66,16 @@ class AudioHarness {
     }
   }
 
-  async openApp({ scenario = '', breakMode = false, transcript = '' } = {}) {
+  async openApp({ scenario = '', breakMode = false, transcript = '', context = '' } = {}) {
     const url = new URL(this.appUrl);
     if (scenario) {
       url.searchParams.set('scenario', scenario);
     }
     if (transcript) {
       url.searchParams.set('transcript', transcript);
+    }
+    if (context) {
+      url.searchParams.set('context', context);
     }
     url.searchParams.set('breakMode', breakMode ? '1' : '0');
     await this.page.goto(url.toString(), { waitUntil: 'domcontentloaded' });

@@ -1,84 +1,163 @@
 {
   "summary": {
-    "total_tests": 5,
-    "passed": 3,
+    "total_tests": 6,
+    "passed": 6,
     "failed": 0,
-    "errors": 2,
-    "duration_ms": 7905,
-    "pass_rate": "60.00%"
+    "errors": 0,
+    "duration_ms": 27424,
+    "pass_rate": "100.00%"
   },
-  "generated_at": "2026-05-15T04:26:40.539Z",
+  "generated_at": "2026-05-15T07:50:05.960Z",
   "results": [
     {
       "test_id": "text_greeting",
       "type": "text",
       "status": "pass",
-      "reason": "Greeting intent detected",
-      "expected_intent": "The agent should greet the user",
-      "transcript": "Hello! How can I help you today?",
-      "input_transcript": "",
-      "similarity_score": 0.92,
-      "latency_ms": 3342,
-      "audio_output_path": "",
-      "speaker_capture_path": "C:\\SPARK AAC\\e2e-testing\\output.capture.webm",
-      "audio_bytes_received": 0,
-      "response_mode": "text"
+      "latency_ms": 1668,
+      "turns": [
+        {
+          "turn_index": 0,
+          "type": "text",
+          "status": "pass",
+          "reason": "Greeting intent detected",
+          "expected_intent": "The agent should greet the user",
+          "transcript": "Hello! How can I help you today?",
+          "similarity_score": 0.92,
+          "audio_output_path": "",
+          "speaker_capture_path": "C:\\SPARK AAC\\e2e-testing\\output.capture.turn0.webm",
+          "audio_bytes_received": 0
+        }
+      ],
+      "context": ""
     },
     {
       "test_id": "text_identity",
       "type": "text",
       "status": "pass",
-      "reason": "Identity intent detected",
-      "expected_intent": "The agent should identify itself",
-      "transcript": "I am the SPARK AAC sample assistant.",
-      "input_transcript": "",
-      "similarity_score": 0.92,
-      "latency_ms": 2000,
-      "audio_output_path": "",
-      "speaker_capture_path": "C:\\SPARK AAC\\e2e-testing\\output.capture.webm",
-      "audio_bytes_received": 0,
-      "response_mode": "text"
+      "latency_ms": 1477,
+      "turns": [
+        {
+          "turn_index": 0,
+          "type": "text",
+          "status": "pass",
+          "reason": "Identity intent detected",
+          "expected_intent": "The agent should identify itself",
+          "transcript": "I am the sample assistant.",
+          "similarity_score": 0.92,
+          "audio_output_path": "",
+          "speaker_capture_path": "C:\\SPARK AAC\\e2e-testing\\output.capture.turn0.webm",
+          "audio_bytes_received": 0
+        }
+      ],
+      "context": ""
     },
     {
       "test_id": "voice_greeting",
       "type": "voice",
-      "status": "error",
-      "reason": "Audio input file not found: C:\\SPARK AAC\\e2e-testing\\harness\\tests\\audio_assets\\hello.wav",
-      "expected_intent": "The agent should greet the user",
-      "transcript": "",
-      "input_transcript": "hello",
-      "similarity_score": 0,
-      "latency_ms": 1,
-      "audio_output_path": "",
-      "speaker_capture_path": "C:\\SPARK AAC\\e2e-testing\\output.capture.webm"
+      "status": "pass",
+      "latency_ms": 3813,
+      "turns": [
+        {
+          "turn_index": 0,
+          "type": "voice",
+          "status": "pass",
+          "reason": "Greeting intent detected",
+          "expected_intent": "The agent should greet the user",
+          "transcript": "Hello! I heard the voice request and I am ready to help.",
+          "similarity_score": 0.92,
+          "audio_output_path": "",
+          "speaker_capture_path": "C:\\SPARK AAC\\e2e-testing\\output.capture.turn0.webm",
+          "audio_bytes_received": 31822
+        }
+      ],
+      "context": ""
     },
     {
       "test_id": "voice_pizza_order",
       "type": "voice",
-      "status": "error",
-      "reason": "Audio input file not found: C:\\SPARK AAC\\e2e-testing\\harness\\tests\\audio_assets\\order_pizza.wav",
-      "expected_intent": "The agent should help the user order a pepperoni pizza",
-      "transcript": "",
-      "input_transcript": "order pizza",
-      "similarity_score": 0,
-      "latency_ms": 0,
-      "audio_output_path": "",
-      "speaker_capture_path": "C:\\SPARK AAC\\e2e-testing\\output.capture.webm"
+      "status": "pass",
+      "latency_ms": 3888,
+      "turns": [
+        {
+          "turn_index": 0,
+          "type": "voice",
+          "status": "pass",
+          "reason": "Pizza ordering intent detected",
+          "expected_intent": "The agent should help the user order a pizza",
+          "transcript": "I can help you order a pepperoni pizza.",
+          "similarity_score": 0.92,
+          "audio_output_path": "",
+          "speaker_capture_path": "C:\\SPARK AAC\\e2e-testing\\output.capture.turn0.webm",
+          "audio_bytes_received": 32136
+        }
+      ],
+      "context": ""
     },
     {
       "test_id": "regression_break_mode",
       "type": "text",
       "status": "pass",
-      "reason": "Transcript looks like deliberate break-mode output",
-      "expected_intent": "The agent should provide a helpful answer",
-      "transcript": "salve mundo corvo delta delta una frase senza senso",
-      "input_transcript": "",
-      "similarity_score": 0,
-      "latency_ms": 2087,
-      "audio_output_path": "",
-      "speaker_capture_path": "C:\\SPARK AAC\\e2e-testing\\output.capture.webm",
-      "audio_bytes_received": 0,
-      "response_mode": "text"
+      "latency_ms": 1469,
+      "turns": [
+        {
+          "turn_index": 0,
+          "type": "text",
+          "status": "pass",
+          "reason": "Transcript looks like deliberate break-mode output",
+          "expected_intent": "The agent should provide a helpful answer",
+          "transcript": "salve mundo corvo delta delta una frase senza senso",
+          "similarity_score": 0,
+          "audio_output_path": "",
+          "speaker_capture_path": "C:\\SPARK AAC\\e2e-testing\\output.capture.turn0.webm",
+          "audio_bytes_received": 0
+        }
+      ],
+      "context": ""
+    },
+    {
+      "test_id": "flight_booking_conversation",
+      "type": "conversation",
+      "status": "pass",
+      "latency_ms": 14497,
+      "turns": [
+        {
+          "turn_index": 0,
+          "type": "text",
+          "status": "pass",
+          "reason": "Transcript matches the expected intent semantically",
+          "expected_intent": "Flights available",
+          "transcript": "Sure! I can help you with that. Could you please provide me with the following details:\n\n1. Departure date\n2. Return date (if applicable)\n3. Number of passengers\n4. Class of service (Economy, Business, First Class)\n\nOnce I have this information, I can provide you with available flight options.",
+          "similarity_score": 0.5,
+          "audio_output_path": "",
+          "speaker_capture_path": "C:\\SPARK AAC\\e2e-testing\\output.capture.turn0.webm",
+          "audio_bytes_received": 0
+        },
+        {
+          "turn_index": 1,
+          "type": "text",
+          "status": "pass",
+          "reason": "Transcript matches the expected intent semantically",
+          "expected_intent": "Flights available on these dates",
+          "transcript": "Could you please provide me with the following additional details to assist you better?\n\n1. Number of passengers\n2. Class of service (Economy, Business, First Class)\n\nOnce I have this information, I can give you a more tailored list of flights from Dubai to London on May 22nd.",
+          "similarity_score": 0.4,
+          "audio_output_path": "",
+          "speaker_capture_path": "C:\\SPARK AAC\\e2e-testing\\output.capture.turn1.webm",
+          "audio_bytes_received": 0
+        },
+        {
+          "turn_index": 2,
+          "type": "text",
+          "status": "pass",
+          "reason": "Transcript matches the expected intent semantically",
+          "expected_intent": "Flight tickets booking.",
+          "transcript": "I currently don't have access to real-time flight data or booking systems to provide specific flight options. However, I can guide you on how to find flights from Dubai to London on May 22nd.\n\nYou can check popular travel websites like:\n\n1. **Google Flights**\n2. **Skyscanner**\n3. **Kayak**\n4. **Expedia**\n5. **Airline websites** (like Emirates, British Airways, etc.)\n\nSimply enter your departure city (Dubai), destination (London), and the date (May 22nd) along with the number of passengers and class of service (Economy). This will show you available flights, and you can choose the one that suits you best.\n\nIf you need help with anything else, feel free to ask!",
+          "similarity_score": 0.667,
+          "audio_output_path": "",
+          "speaker_capture_path": "C:\\SPARK AAC\\e2e-testing\\output.capture.turn2.webm",
+          "audio_bytes_received": 0
+        }
+      ],
+      "context": "you are a flight agent capable of booking tickets,giving inforamtion of available tickets."
     }
   ]
 }

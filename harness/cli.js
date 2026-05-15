@@ -84,24 +84,25 @@ async function run() {
 
   for (const testCase of testCases) {
     const caseStart = Date.now();
+    const isMultiTurn = Array.isArray(testCase.turns);
+    const turns = isMultiTurn ? testCase.turns : [testCase];
+
     const harness = new AudioHarness({
       appUrl: args.appUrl,
       wsUrl: args.wsUrl,
       headless: args.headless,
-      audioInputPath: testCase.type === 'voice' ? testCase.input_audio : null,
+      audioInputPath: turns[0].type === 'voice' ? path.resolve(path.dirname(args.config), '..', turns[0].input_audio) : null,
     });
 
     let status = 'error';
     let reason = 'Unknown error';
-    let transcript = '';
-    let audioPath = '';
-    let payload = null;
 
     try {
       await harness.launch();
       await harness.openApp({
         scenario: testCase.scenario || testCase.test_id,
-        transcript: testCase.input_transcript || '',
+        transcript: turns[0].input_transcript || '',
+        context: testCase.context || '',
         breakMode: false,
       });
 
@@ -109,67 +110,84 @@ async function run() {
         await harness.enableBreakMode(true);
       }
 
-      const beforeCount = await harness.getAssistantMessageCount();
-      await harness.startSpeakerCapture();
+      const turnResults = [];
+      let allPassed = true;
+      let lastReason = '';
 
-      if (testCase.type === 'text') {
-        await harness.sendText(testCase.input);
-      } else if (testCase.type === 'voice') {
-        await harness.sendVoice();
-      } else {
-        throw new Error(`Unsupported test type: ${testCase.type}`);
+      for (let i = 0; i < turns.length; i++) {
+        const turn = turns[i];
+        const beforeCount = await harness.getAssistantMessageCount();
+        await harness.startSpeakerCapture();
+
+        if (turn.type === 'text') {
+          await harness.sendText(turn.input);
+        } else if (turn.type === 'voice') {
+          await harness.sendVoice();
+        } else {
+          throw new Error(`Unsupported test type: ${turn.type}`);
+        }
+
+        await harness.waitForAssistantMessage(beforeCount, turn.latency_threshold_ms || 15000);
+        const transcript = await harness.getLastAssistantMessage();
+        const payload = await harness.getLastAssistantPayload();
+
+        const capturePath = path.resolve(__dirname, `../output.capture.turn${i}.webm`);
+        await harness.stopSpeakerCapture(capturePath);
+
+        let audioPath = '';
+        if (payload?.audio?.base64) {
+          audioPath = path.resolve(__dirname, `../output.turn${i}.wav`);
+          fs.writeFileSync(audioPath, Buffer.from(payload.audio.base64, 'base64'));
+        }
+
+        const judgement = judgeResponse(transcript, turn.expected_intent || '');
+        const turnStatus = classifyStatus(judgement.pass ? 'pass' : 'fail', Boolean(turn.expected_fail));
+        reason = judgement.reason;
+        lastReason = reason;
+
+        if (turnStatus !== 'pass') {
+          allPassed = false;
+        }
+
+        turnResults.push({
+          turn_index: i,
+          type: turn.type,
+          status: turnStatus,
+          reason,
+          expected_intent: turn.expected_intent || '',
+          transcript,
+          similarity_score: judgement.similarity_score,
+          audio_output_path: audioPath,
+          speaker_capture_path: capturePath,
+          audio_bytes_received: payload?.received_audio_bytes || 0,
+        });
       }
 
-      await harness.waitForAssistantMessage(beforeCount, testCase.latency_threshold_ms || 10000);
-      transcript = await harness.getLastAssistantMessage();
-      payload = await harness.getLastAssistantPayload();
-      const capturePath = path.resolve(__dirname, '../output.capture.webm');
-      await harness.stopSpeakerCapture(capturePath);
-      audioPath = path.resolve(__dirname, '../output.wav');
-      if (payload?.audio?.base64) {
-        fs.writeFileSync(audioPath, Buffer.from(payload.audio.base64, 'base64'));
-      } else {
-        audioPath = '';
-      }
-
-      const judgement = judgeResponse(transcript, testCase.expected_intent || '');
-      status = classifyStatus(judgement.pass ? 'pass' : 'fail', Boolean(testCase.expected_fail));
-      reason = judgement.reason;
+      status = allPassed ? 'pass' : 'fail';
 
       results.push({
         test_id: testCase.test_id,
-        type: testCase.type,
+        type: isMultiTurn ? 'conversation' : testCase.type,
         status,
-        reason,
-        expected_intent: testCase.expected_intent || '',
-        transcript,
-        input_transcript: payload?.input_transcript || testCase.input_transcript || '',
-        similarity_score: judgement.similarity_score,
         latency_ms: Date.now() - caseStart,
-        audio_output_path: audioPath,
-        speaker_capture_path: capturePath,
-        audio_bytes_received: payload?.received_audio_bytes || 0,
-        response_mode: payload?.mode || testCase.type,
+        turns: turnResults,
+        context: testCase.context || '',
       });
 
       const icon = status === 'pass' ? 'PASS' : 'FAIL';
       console.log(`${icon} ${testCase.test_id} (${Date.now() - caseStart}ms)`);
-      console.log(`  ${reason}`);
+      if (status !== 'pass') {
+        console.log(`  Failed at one or more turns: ${lastReason}`);
+      }
     } catch (error) {
       status = 'error';
       reason = error.message;
       results.push({
         test_id: testCase.test_id,
-        type: testCase.type,
+        type: Array.isArray(testCase.turns) ? 'conversation' : testCase.type,
         status,
         reason,
-        expected_intent: testCase.expected_intent || '',
-        transcript,
-        input_transcript: testCase.input_transcript || '',
-        similarity_score: 0,
         latency_ms: Date.now() - caseStart,
-        audio_output_path: audioPath,
-        speaker_capture_path: path.resolve(__dirname, '../output.capture.webm'),
       });
       console.log(`ERROR ${testCase.test_id}`);
       console.log(`  ${reason}`);

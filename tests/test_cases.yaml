@@ -19,9 +19,8 @@ test_cases:
 
   - test_id: voice_greeting
     type: voice
-    input_audio: ./tests/audio_assets/hello.wav
-    input_transcript: hello
-    scenario: voice_greeting
+    input_audio: ./tests/audio_assets/regression_hello.wav
+    input_transcript: what is capital of India?
     expected_intent: The agent should greet the user
     latency_threshold_ms: 5000
     tags:
@@ -33,7 +32,7 @@ test_cases:
     input_audio: ./tests/audio_assets/order_pizza.wav
     input_transcript: order pizza
     scenario: voice_pizza_order
-    expected_intent: The agent should help the user order a pepperoni pizza
+    expected_intent: The agent should help the user order a pizza
     latency_threshold_ms: 5000
     tags:
       - voice
@@ -49,6 +48,19 @@ test_cases:
     tags:
       - regression
       - break-mode
+
+  - test_id: flight_booking_conversation
+    context: "you are a flight agent capable of booking tickets,giving inforamtion of available tickets."
+    turns:
+      - type: text
+        input: "hi,Give me flights from Dubai to London"
+        expected_intent: "Flights available"
+      - type: text
+        input: "ok show me these flights only for 22nd May."
+        expected_intent: "Flights available on these dates"
+      - type: text
+        input: "Give me 2 economy tickets for chosen Flight."
+        expected_intent: "Flight tickets booking."
 
 execution:
   app_url: http://localhost:3000

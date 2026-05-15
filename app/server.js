@@ -96,11 +96,18 @@ function selectCannedResponse(message, scenario) {
   };
 }
 
-async function generateLlmResponse(message) {
+async function generateLlmResponse(message, session) {
   const prompt = String(message || '').trim();
   if (!LLM_API_KEY || !LLM_MODEL || !prompt) {
     return null;
   }
+
+  const systemContent = session?.context || 'You are a concise, helpful AAC assistant. Answer the user directly in one or two short paragraphs.';
+  const messages = [
+    { role: 'system', content: systemContent },
+    ...(session?.history || [])
+  ];
+  messages.push({ role: 'user', content: prompt });
 
   try {
     const response = await fetch(`${LLM_API_BASE.replace(/\/$/, '')}/chat/completions`, {
@@ -113,16 +120,7 @@ async function generateLlmResponse(message) {
       },
       body: JSON.stringify({
         model: LLM_MODEL,
-        messages: [
-          {
-            role: 'system',
-            content: 'You are a concise, helpful AAC assistant. Answer the user directly in one or two short paragraphs.',
-          },
-          {
-            role: 'user',
-            content: prompt,
-          },
-        ],
+        messages,
         temperature: 0.4,
       }),
     });
@@ -133,20 +131,28 @@ async function generateLlmResponse(message) {
     }
 
     const payload = await response.json();
-    return String(payload?.choices?.[0]?.message?.content || '').trim() || null;
+    const reply = String(payload?.choices?.[0]?.message?.content || '').trim() || null;
+    if (reply && session) {
+      session.history = session.history || [];
+      session.history.push({ role: 'user', content: prompt });
+      session.history.push({ role: 'assistant', content: reply });
+    }
+    return reply;
   } catch (error) {
     console.error(`LLM request error: ${error.message}`);
     return null;
   }
 }
 
-async function selectResponse(message, scenario) {
-  const canned = selectCannedResponse(message, scenario);
-  if (canned.response_text) {
-    return canned;
+async function selectResponse(message, scenario, session) {
+  if (!session || !session.context) {
+    const canned = selectCannedResponse(message, scenario);
+    if (canned.response_text) {
+      return canned;
+    }
   }
 
-  const llmText = await generateLlmResponse(message);
+  const llmText = await generateLlmResponse(message, session);
   if (llmText) {
     return {
       intent_key: 'llm_fallback',
@@ -192,9 +198,9 @@ function brokenResponse() {
   };
 }
 
-async function createAssistantPayload({ mode, message, scenario, breakMode, receivedAudioBytes }) {
+async function createAssistantPayload({ mode, message, scenario, breakMode, receivedAudioBytes, session }) {
   const start = Date.now();
-  const selected = breakMode ? brokenResponse() : await selectResponse(message, scenario);
+  const selected = breakMode ? brokenResponse() : await selectResponse(message, scenario, session);
   const includeSyntheticAudio = process.env.PLAY_SYNTHETIC_AUDIO === 'true';
   const audioBase64 = includeSyntheticAudio ? buildResponseAudioBase64(selected.response_text) : null;
 
@@ -233,6 +239,8 @@ const wss = new WebSocketServer({ server, path: '/ws' });
 
 wss.on('connection', (socket) => {
   const session = {
+    history: [],
+    context: '',
     breakMode: false,
     scenario: '',
     pendingVoice: false,
@@ -266,6 +274,8 @@ wss.on('connection', (socket) => {
     if (data.type === 'session') {
       session.breakMode = Boolean(data.breakMode);
       session.scenario = data.scenario || '';
+      session.context = data.context || '';
+      session.history = [];
       return;
     }
 
@@ -280,6 +290,7 @@ wss.on('connection', (socket) => {
         message: data.text,
         scenario: data.scenario,
         breakMode: Boolean(data.breakMode ?? session.breakMode),
+        session,
       });
 
       socket.send(JSON.stringify(response));
@@ -298,16 +309,20 @@ wss.on('connection', (socket) => {
 
     if (data.type === 'voice_stop') {
       const receivedAudioBytes = session.voiceChunks.reduce((sum, chunk) => sum + chunk.length, 0);
-      let voiceTranscript = String(data.transcript || session.voiceTranscript || '').trim();
+      let voiceTranscript = '';
 
-      if (!voiceTranscript && receivedAudioBytes > 0) {
-        console.log(`No transcript fixture, using Python STT (free, no Whisper)...`);
+      if (receivedAudioBytes > 0) {
+        console.log(`Audio bytes received. Running Python STT...`);
         const fullBuffer = Buffer.concat(session.voiceChunks);
         const sttResult = transcribeAudioLocally(fullBuffer);
         if (sttResult) {
           voiceTranscript = sttResult;
           console.log(`Successfully transcribed: ${voiceTranscript}`);
         }
+      }
+
+      if (!voiceTranscript) {
+        voiceTranscript = String(data.transcript || session.voiceTranscript || '').trim();
       }
 
       const response = voiceTranscript
@@ -317,6 +332,7 @@ wss.on('connection', (socket) => {
           scenario: data.scenario || session.scenario,
           breakMode: Boolean(data.breakMode ?? session.breakMode),
           receivedAudioBytes,
+          session,
         })
         : {
           type: 'assistant_reply',
