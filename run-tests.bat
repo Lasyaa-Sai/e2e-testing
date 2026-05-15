@@ -3,7 +3,7 @@ setlocal enabledelayedexpansion
 
 echo.
 echo ========================================
-echo SPARK AAC E2E Harness Run
+echo  E2E Harness Run
 echo ========================================
 echo.
 
@@ -17,14 +17,14 @@ if not exist "harness\node_modules" (
   exit /b 1
 )
 
-start "SPARK AAC Backend" /B cmd /c "cd /d ""%~dp0app"" && node server.js"
+start "Backend" /B cmd /c "cd /d ""%~dp0app"" && node server.js"
 echo Waiting for backend...
 :wait_backend
 timeout /t 1 /nobreak >nul
 curl -s http://localhost:5000/health >nul 2>&1
 if errorlevel 1 goto wait_backend
 
-start "SPARK AAC App" /B cmd /c "cd /d ""%~dp0app"" && npm start"
+start "App" /B cmd /c "cd /d ""%~dp0app"" && npm start"
 echo Waiting for app...
 :wait_app
 timeout /t 2 /nobreak >nul

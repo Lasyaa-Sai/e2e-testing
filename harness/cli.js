@@ -76,7 +76,7 @@ async function run() {
   const startTime = Date.now();
   const results = [];
 
-  console.log('SPARK AAC Phase 2 harness');
+  console.log('Phase 2 harness');
   console.log(`Config: ${args.config}`);
   console.log(`App:    ${args.appUrl}`);
   console.log(`WS:     ${args.wsUrl}`);

@@ -1,5 +1,7 @@
 const http = require('http');
 const path = require('path');
+const fs = require('fs');
+const { execSync } = require('child_process');
 const express = require('express');
 const cors = require('cors');
 const { WebSocketServer } = require('ws');
@@ -30,11 +32,11 @@ const textResponses = {
   },
   'what is your name': {
     intent_key: 'identity',
-    response_text: 'I am the SPARK AAC sample assistant.',
+    response_text: 'I am the sample assistant.',
   },
   'who are you': {
     intent_key: 'identity',
-    response_text: 'I am the SPARK AAC sample assistant.',
+    response_text: 'I am the sample assistant.',
   },
   'order pizza': {
     intent_key: 'pizza_order',
@@ -57,7 +59,7 @@ const voiceResponses = {
   },
   voice_who_are_you: {
     intent_key: 'identity',
-    response_text: 'I am the SPARK AAC sample assistant and I respond over websocket.',
+    response_text: 'I am the sample assistant and I respond over websocket.',
   },
 };
 
@@ -107,7 +109,7 @@ async function generateLlmResponse(message) {
         Authorization: `Bearer ${LLM_API_KEY}`,
         'Content-Type': 'application/json',
         'HTTP-Referer': 'http://localhost:3000',
-        'X-Title': 'SPARK AAC E2E Harness',
+        'X-Title': 'E2E Harness',
       },
       body: JSON.stringify({
         model: LLM_MODEL,
@@ -156,6 +158,31 @@ async function selectResponse(message, scenario) {
     intent_key: 'fallback',
     response_text: `I heard: ${message}. Tell me a little more.`,
   };
+}
+
+function transcribeAudioLocally(audioBuffer) {
+  try {
+    const tmpIn = path.join(__dirname, `temp_${Date.now()}.webm`);
+    const tmpOut = path.join(__dirname, `temp_${Date.now()}.wav`);
+    fs.writeFileSync(tmpIn, audioBuffer);
+
+    let pythonCmd = 'python';
+    const venvPython = path.join(__dirname, '../.venv/Scripts/python.exe');
+    if (fs.existsSync(venvPython)) {
+      pythonCmd = `"${venvPython}"`;
+    }
+
+    execSync(`ffmpeg -y -i ${tmpIn} -ar 16000 -ac 1 ${tmpOut} -loglevel quiet`);
+    const pyScript = path.join(__dirname, '../python-voice/stt.py');
+    const result = execSync(`${pythonCmd} "${pyScript}" "${tmpOut}"`).toString().trim();
+
+    fs.unlinkSync(tmpIn);
+    if (fs.existsSync(tmpOut)) fs.unlinkSync(tmpOut);
+    return result || null;
+  } catch (error) {
+    console.error('Local STT error:', error.message);
+    return null;
+  }
 }
 
 function brokenResponse() {
@@ -271,7 +298,18 @@ wss.on('connection', (socket) => {
 
     if (data.type === 'voice_stop') {
       const receivedAudioBytes = session.voiceChunks.reduce((sum, chunk) => sum + chunk.length, 0);
-      const voiceTranscript = String(data.transcript || session.voiceTranscript || '').trim();
+      let voiceTranscript = String(data.transcript || session.voiceTranscript || '').trim();
+
+      if (!voiceTranscript && receivedAudioBytes > 0) {
+        console.log(`No transcript fixture, using Python STT (free, no Whisper)...`);
+        const fullBuffer = Buffer.concat(session.voiceChunks);
+        const sttResult = transcribeAudioLocally(fullBuffer);
+        if (sttResult) {
+          voiceTranscript = sttResult;
+          console.log(`Successfully transcribed: ${voiceTranscript}`);
+        }
+      }
+
       const response = voiceTranscript
         ? await createAssistantPayload({
           mode: 'voice',

@@ -1,7 +1,7 @@
-# SPARK AAC End-to-End Testing Harness
+# End-to-End Testing Harness
 
 ## 📖 Overview
-The SPARK AAC E2E Testing Harness is designed to automate the verification of **Voice and Text conversational flows** against a real client. It replaces slow, inconsistent manual smoke testing, ensuring that both text and voice functions are intact before a release goes out. 
+E2E Testing Harness is designed to automate the verification of **Voice and Text conversational flows** against a real client. It replaces slow, inconsistent manual smoke testing, ensuring that both text and voice functions are intact before a release goes out. 
 
 The harness focuses on handling **real audio paths** (mic input and speaker output) rather than just simulating voice workflows with text. It also uses robust **semantic verification** to assert outcomes against non-deterministic LLM responses.
 

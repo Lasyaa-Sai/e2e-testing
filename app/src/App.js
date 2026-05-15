@@ -103,7 +103,7 @@ function App() {
     return () => {
       window.__responseCaptureStream = null;
       window.__responseCaptureReady = false;
-      audioContext.close().catch(() => {});
+      audioContext.close().catch(() => { });
     };
   }, []);
 
@@ -143,7 +143,7 @@ function App() {
     setInput('');
     setIsSending(true);
     setStatus('Sending text...');
-    audioContextRef.current?.resume().catch(() => {});
+    audioContextRef.current?.resume().catch(() => { });
 
     wsRef.current.send(JSON.stringify({
       type: 'text',
@@ -183,7 +183,7 @@ function App() {
     const cleanup = () => {
       window.cancelAnimationFrame(frameId);
       source.disconnect();
-      context.close().catch(() => {});
+      context.close().catch(() => { });
       if (voiceMaxTimerRef.current) {
         window.clearTimeout(voiceMaxTimerRef.current);
         voiceMaxTimerRef.current = null;
@@ -233,7 +233,7 @@ function App() {
 
     const voiceTranscript = (initialVoiceTranscript || input).trim();
     const mediaStream = await navigator.mediaDevices.getUserMedia({ audio: true });
-    audioContextRef.current?.resume().catch(() => {});
+    audioContextRef.current?.resume().catch(() => { });
     const recorder = new MediaRecorder(mediaStream);
     const chunks = [];
     recorderRef.current = recorder;
@@ -318,7 +318,6 @@ function App() {
       <main className="panel">
         <section className="hero">
           <div>
-            <p className="eyebrow">SPARK AAC</p>
             <h1>Voice and text harness sample</h1>
             <p className="lede">
               The app sends mic bytes over websocket, plays backend audio with Web Audio API,
