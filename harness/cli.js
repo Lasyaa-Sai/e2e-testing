@@ -100,7 +100,7 @@ async function run() {
     try {
       await harness.launch();
       await harness.openApp({
-        scenario: testCase.scenario || testCase.test_id,
+        scenario: testCase.scenario || '',
         transcript: turns[0].input_transcript || '',
         context: testCase.context || '',
         breakMode: false,
@@ -169,6 +169,7 @@ async function run() {
         test_id: testCase.test_id,
         type: isMultiTurn ? 'conversation' : testCase.type,
         status,
+        expected_fail: Boolean(testCase.expected_fail),
         latency_ms: Date.now() - caseStart,
         turns: turnResults,
         context: testCase.context || '',

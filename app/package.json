@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "Voice and Text Chat Application for E2E Testing",
   "private": true,
+  "proxy": "http://localhost:5000",
   "dependencies": {
     "cors": "^2.8.5",
     "dotenv": "^16.4.5",

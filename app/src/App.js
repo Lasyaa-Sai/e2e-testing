@@ -1,5 +1,6 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 import './App.css';
+import ReportDashboard from './ReportDashboard';
 
 const MAX_VOICE_RECORD_MS = 15000;
 const MIN_VOICE_RECORD_MS = 900;
@@ -27,6 +28,7 @@ function App() {
   const [lastResponse, setLastResponse] = useState('');
   const [scenario] = useState(initialScenario);
   const [context] = useState(initialContext);
+  const [showReport, setShowReport] = useState(false);
 
   const wsRef = useRef(null);
   const recorderRef = useRef(null);
@@ -346,6 +348,24 @@ function App() {
           >
             {breakMode ? 'Break Mode On' : 'Break Mode Off'}
           </button>
+
+          <button
+            type="button"
+            style={{
+              background: 'linear-gradient(to right, #3b82f6, #8b5cf6)',
+              color: 'white',
+              border: 'none',
+              marginLeft: 'auto',
+              padding: '10px 20px',
+              borderRadius: '24px',
+              fontWeight: 600,
+              cursor: 'pointer',
+              boxShadow: '0 4px 14px rgba(0,0,0,0.2)'
+            }}
+            onClick={() => setShowReport(true)}
+          >
+            Show Verification Report Dashboard
+          </button>
         </section>
 
         <section className="conversation" aria-label="Conversation log">
@@ -408,6 +428,8 @@ function App() {
           <span>{lastMessage ? `Messages: ${messages.length}` : 'Waiting for first turn'}</span>
         </footer>
       </main>
+
+      {showReport && <ReportDashboard onClose={() => setShowReport(false)} />}
     </div>
   );
 }

@@ -70,7 +70,7 @@ function buildLexicalJudgement(transcript, expectedIntent) {
   const transcriptSet = new Set(transcriptTokens);
   const overlap = intentTokens.filter((token) => transcriptSet.has(token)).length;
   const score = overlap / intentTokens.length;
-  const pass = score >= 0.35;
+  const pass = score >= 0.5;
 
   return {
     pass,

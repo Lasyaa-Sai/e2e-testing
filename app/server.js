@@ -178,7 +178,7 @@ function transcribeAudioLocally(audioBuffer) {
       pythonCmd = `"${venvPython}"`;
     }
 
-    execSync(`ffmpeg -y -i ${tmpIn} -ar 16000 -ac 1 ${tmpOut} -loglevel quiet`);
+    execSync(`ffmpeg -y -i "${tmpIn}" -ar 16000 -ac 1 "${tmpOut}" -loglevel quiet`);
     const pyScript = path.join(__dirname, '../python-voice/stt.py');
     const result = execSync(`${pythonCmd} "${pyScript}" "${tmpOut}"`).toString().trim();
 
@@ -232,6 +232,15 @@ app.get('/health', (req, res) => {
 
 app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'index.html'));
+});
+
+app.get('/api/report', (req, res) => {
+  const reportPath = path.resolve(__dirname, '../report.json');
+  if (fs.existsSync(reportPath)) {
+    res.sendFile(reportPath);
+  } else {
+    res.status(404).json({ error: 'Report not generated yet.' });
+  }
 });
 
 const server = http.createServer(app);
@@ -315,13 +324,9 @@ wss.on('connection', (socket) => {
         console.log(`Audio bytes received. Running Python STT...`);
         const fullBuffer = Buffer.concat(session.voiceChunks);
         const sttResult = transcribeAudioLocally(fullBuffer);
-        if (sttResult) {
-          voiceTranscript = sttResult;
-          console.log(`Successfully transcribed: ${voiceTranscript}`);
-        }
-      }
-
-      if (!voiceTranscript) {
+        voiceTranscript = sttResult || '';
+        console.log(voiceTranscript ? `Successfully transcribed: ${voiceTranscript}` : `STT returned empty transcript.`);
+      } else {
         voiceTranscript = String(data.transcript || session.voiceTranscript || '').trim();
       }
 
