@@ -1,19 +1,20 @@
 {
   "summary": {
     "total_tests": 6,
-    "passed": 6,
-    "failed": 0,
-    "errors": 0,
-    "duration_ms": 34139,
-    "pass_rate": "100.00%"
+    "passed": 4,
+    "failed": 1,
+    "errors": 1,
+    "duration_ms": 34898,
+    "pass_rate": "66.67%"
   },
-  "generated_at": "2026-05-15T09:51:06.380Z",
+  "generated_at": "2026-05-15T10:08:59.045Z",
   "results": [
     {
       "test_id": "text_greeting",
       "type": "text",
       "status": "pass",
-      "latency_ms": 2245,
+      "expected_fail": false,
+      "latency_ms": 2624,
       "turns": [
         {
           "turn_index": 0,
@@ -34,7 +35,8 @@
       "test_id": "text_identity",
       "type": "text",
       "status": "pass",
-      "latency_ms": 1489,
+      "expected_fail": false,
+      "latency_ms": 2032,
       "turns": [
         {
           "turn_index": 0,
@@ -54,29 +56,16 @@
     {
       "test_id": "voice_greeting",
       "type": "voice",
-      "status": "pass",
-      "latency_ms": 7418,
-      "turns": [
-        {
-          "turn_index": 0,
-          "type": "voice",
-          "status": "pass",
-          "reason": "Transcript does not contain enough of the expected intent",
-          "expected_intent": "The agent should greet the user",
-          "transcript": "Received 32136 voice audio bytes over WebSocket. No transcript fixture was provided, so the backend cannot infer the spoken content without a voice model.",
-          "similarity_score": 0.333,
-          "audio_output_path": "",
-          "speaker_capture_path": "C:\\SPARK AAC\\e2e-testing\\output.capture.turn0.webm",
-          "audio_bytes_received": 32136
-        }
-      ],
-      "context": ""
+      "status": "error",
+      "reason": "page.waitForFunction: Timeout 5000ms exceeded.",
+      "latency_ms": 9079
     },
     {
       "test_id": "voice_pizza_order",
       "type": "voice",
       "status": "pass",
-      "latency_ms": 5512,
+      "expected_fail": false,
+      "latency_ms": 6878,
       "turns": [
         {
           "turn_index": 0,
@@ -97,7 +86,8 @@
       "test_id": "regression_break_mode",
       "type": "text",
       "status": "pass",
-      "latency_ms": 1543,
+      "expected_fail": true,
+      "latency_ms": 2365,
       "turns": [
         {
           "turn_index": 0,
@@ -117,8 +107,9 @@
     {
       "test_id": "flight_booking_conversation",
       "type": "conversation",
-      "status": "pass",
-      "latency_ms": 15310,
+      "status": "fail",
+      "expected_fail": false,
+      "latency_ms": 10937,
       "turns": [
         {
           "turn_index": 0,
@@ -126,7 +117,7 @@
           "status": "pass",
           "reason": "Transcript matches the expected intent semantically",
           "expected_intent": "help you find flights provide details",
-          "transcript": "Sure! To help you find flights from Dubai to London, could you please provide me with the following details:\n\n1. Travel dates (departure and return, if applicable)\n2. Number of passengers\n3. Any specific preferences (e.g., direct flights, specific airlines, budget range)\n\nOnce I have this information, I can assist you better!",
+          "transcript": "I can help you with that! Could you please provide me with the following details to find the best flights for you?\n\n1. Travel dates (departure and return, if applicable)\n2. Number of passengers\n3. Class of service (economy, business, first class)\n4. Any specific airlines you prefer?",
           "similarity_score": 1,
           "audio_output_path": "",
           "speaker_capture_path": "C:\\SPARK AAC\\e2e-testing\\output.capture.turn0.webm",
@@ -135,11 +126,11 @@
         {
           "turn_index": 1,
           "type": "text",
-          "status": "pass",
-          "reason": "Transcript matches the expected intent semantically",
+          "status": "fail",
+          "reason": "Transcript does not contain enough of the expected intent",
           "expected_intent": "Flights available on these dates",
-          "transcript": "I currently do not have access to real-time flight data or booking systems. However, I can guide you on how to find flights from Dubai to London for your specified date of May 22nd.\n\nHere’s how you can search for flights:\n\n1. **Visit a Flight Search Engine**: Go to websites like Google Flights, Skyscanner, Expedia, or Kayak.\n\n2. **Enter Your Details**:\n   - Departure: Dubai (DXB)\n   - Arrival: London (LON)\n   - Departure Date: May 22, 2024\n   - Number of Passengers: (Enter the number)\n\n3. **Search for Flights**: Click on the search button to view available flights.\n\n4. **Filter Results**: You can filter by direct flights, price, duration, and airlines based on your preferences.\n\n5. **Choose and Book**: Once you find a flight that suits your needs, you can proceed with the booking directly through the website or app.\n\nIf you need help with anything else or have specific preferences, feel free to ask!",
-          "similarity_score": 0.6,
+          "transcript": "I currently don't have real-time access to flight databases to provide specific flight listings. However, I can guide you on how to find flights from Dubai to London for May 22nd:\n\n1. **Flight Search Engines**: Use websites like Skyscanner, Google Flights, Expedia, or Kayak. Enter your departure city (Dubai) and destination (London), along with your travel date (May 22nd).\n\n2. **Airline Websites**: Check the websites of airlines that operate on this route, such as Emirates, British Airways, or Etihad Airways.\n\n3. **Travel Agents**: You can also contact a travel agent who can provide you with options and help with booking.\n\nIf you need assistance with anything else, feel free to ask!",
+          "similarity_score": 0.4,
           "audio_output_path": "",
           "speaker_capture_path": "C:\\SPARK AAC\\e2e-testing\\output.capture.turn1.webm",
           "audio_bytes_received": 0
@@ -150,7 +141,7 @@
           "status": "pass",
           "reason": "Transcript matches the expected intent semantically",
           "expected_intent": "Flight tickets booking.",
-          "transcript": "I apologize for the misunderstanding, but I am unable to book flights or access real-time flight data. However, I can guide you through the process of booking your tickets.\n\nHere’s how you can book two economy tickets for your chosen flight from Dubai to London on May 22nd:\n\n1. **Choose Your Flight**: After searching for flights on a travel website, select the flight that you prefer.\n\n2. **Select Number of Passengers**: When you proceed to book, make sure to select \"2\" for the number of economy tickets.\n\n3. **Enter Passenger Information**: Fill in the required details for each passenger, including names, dates of birth, and any other necessary information.\n\n4. **Payment**: Enter your payment details to complete the booking.\n\n5. **Confirmation**: After the payment is processed, you should receive a confirmation email with your flight details.\n\nIf you need assistance with specific steps or have questions about the booking process, feel free to ask!",
+          "transcript": "I apologize for any confusion, but I am unable to book flights or access real-time flight information. However, I can guide you on how to proceed with booking two economy tickets for your chosen flight:\n\n1. **Select Your Flight**: Use a flight search engine or airline website to find the flight you want from Dubai to London on May 22nd.\n\n2. **Choose Your Seats**: Once you find the flight, you will be able to select the number of passengers and choose economy class.\n\n3. **Enter Passenger Details**: Fill in the required information for each passenger, including names, contact information, and any special requests.\n\n4. **Payment**: Proceed to payment to finalize your booking. You can usually pay via credit/debit card or other payment methods.\n\n5. **Confirmation**: After payment, you will receive a confirmation email with your flight details.\n\nIf you need help with any specific steps or have questions about the process, feel free to ask!",
           "similarity_score": 1,
           "audio_output_path": "",
           "speaker_capture_path": "C:\\SPARK AAC\\e2e-testing\\output.capture.turn2.webm",

@@ -12,6 +12,9 @@ harness/node_modules/
 app/build/
 build/
 dist/
+app/temp_*.webm
+app/node_modules/**
+harness/node_modules/**/*.pack
 
 # Logs
 *.log
